@@ -1,9 +1,7 @@
-import { PrismaClient } from "../src/generated/prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import "dotenv/config";
+import { createPrismaClient } from "../src/lib/prisma-client";
 
-const url = process.env.DATABASE_URL ?? "file:./prisma/demo.db";
-const adapter = new PrismaBetterSqlite3({ url });
-const prisma = new PrismaClient({ adapter });
+const prisma = createPrismaClient();
 
 const DEMO_USERS = [
   {

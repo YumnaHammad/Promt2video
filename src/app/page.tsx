@@ -9,10 +9,19 @@ import { FAQ } from "@/components/landing/faq";
 import { CTA } from "@/components/landing/cta";
 import { Footer } from "@/components/landing/footer";
 import { getPublishedTemplates, mapTemplateRecord } from "@/lib/templates";
+import type { TemplateListItem } from "@/lib/templates";
+
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const { templates } = await getPublishedTemplates({ limit: 6 });
-  const showcaseTemplates = templates.map((template) => mapTemplateRecord(template));
+  let showcaseTemplates: TemplateListItem[] = [];
+
+  try {
+    const { templates } = await getPublishedTemplates({ limit: 6 });
+    showcaseTemplates = templates.map((template) => mapTemplateRecord(template));
+  } catch {
+    // DB may be unavailable during build or before first seed
+  }
 
   return (
     <>

@@ -424,6 +424,7 @@ export type MediaLibraryCreateOrConnectWithoutUserInput = {
 
 export type MediaLibraryCreateManyUserInputEnvelope = {
   data: Prisma.MediaLibraryCreateManyUserInput | Prisma.MediaLibraryCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type MediaLibraryUpsertWithWhereUniqueWithoutUserInput = {
@@ -474,6 +475,7 @@ export type MediaLibraryCreateOrConnectWithoutAssetInput = {
 
 export type MediaLibraryCreateManyAssetInputEnvelope = {
   data: Prisma.MediaLibraryCreateManyAssetInput | Prisma.MediaLibraryCreateManyAssetInput[]
+  skipDuplicates?: boolean
 }
 
 export type MediaLibraryUpsertWithWhereUniqueWithoutAssetInput = {
@@ -1278,6 +1280,7 @@ export type MediaLibraryCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * The data used to create many MediaLibraries.
    */
   data: Prisma.MediaLibraryCreateManyInput | Prisma.MediaLibraryCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1296,6 +1299,7 @@ export type MediaLibraryCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * The data used to create many MediaLibraries.
    */
   data: Prisma.MediaLibraryCreateManyInput | Prisma.MediaLibraryCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

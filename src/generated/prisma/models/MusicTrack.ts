@@ -1172,6 +1172,7 @@ export type MusicTrackCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many MusicTracks.
    */
   data: Prisma.MusicTrackCreateManyInput | Prisma.MusicTrackCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1190,6 +1191,7 @@ export type MusicTrackCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many MusicTracks.
    */
   data: Prisma.MusicTrackCreateManyInput | Prisma.MusicTrackCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

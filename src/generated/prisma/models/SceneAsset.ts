@@ -584,6 +584,7 @@ export type SceneAssetCreateOrConnectWithoutSceneInput = {
 
 export type SceneAssetCreateManySceneInputEnvelope = {
   data: Prisma.SceneAssetCreateManySceneInput | Prisma.SceneAssetCreateManySceneInput[]
+  skipDuplicates?: boolean
 }
 
 export type SceneAssetUpsertWithWhereUniqueWithoutSceneInput = {
@@ -646,6 +647,7 @@ export type SceneAssetCreateOrConnectWithoutAssetInput = {
 
 export type SceneAssetCreateManyAssetInputEnvelope = {
   data: Prisma.SceneAssetCreateManyAssetInput | Prisma.SceneAssetCreateManyAssetInput[]
+  skipDuplicates?: boolean
 }
 
 export type SceneAssetUpsertWithWhereUniqueWithoutAssetInput = {
@@ -1506,6 +1508,7 @@ export type SceneAssetCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many SceneAssets.
    */
   data: Prisma.SceneAssetCreateManyInput | Prisma.SceneAssetCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1524,6 +1527,7 @@ export type SceneAssetCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many SceneAssets.
    */
   data: Prisma.SceneAssetCreateManyInput | Prisma.SceneAssetCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

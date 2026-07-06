@@ -644,6 +644,7 @@ export type RenderJobCreateOrConnectWithoutVideoInput = {
 
 export type RenderJobCreateManyVideoInputEnvelope = {
   data: Prisma.RenderJobCreateManyVideoInput | Prisma.RenderJobCreateManyVideoInput[]
+  skipDuplicates?: boolean
 }
 
 export type RenderJobUpsertWithWhereUniqueWithoutVideoInput = {
@@ -1522,6 +1523,7 @@ export type RenderJobCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many RenderJobs.
    */
   data: Prisma.RenderJobCreateManyInput | Prisma.RenderJobCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1540,6 +1542,7 @@ export type RenderJobCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many RenderJobs.
    */
   data: Prisma.RenderJobCreateManyInput | Prisma.RenderJobCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

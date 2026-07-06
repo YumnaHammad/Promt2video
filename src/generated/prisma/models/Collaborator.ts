@@ -434,6 +434,7 @@ export type CollaboratorCreateOrConnectWithoutUserInput = {
 
 export type CollaboratorCreateManyUserInputEnvelope = {
   data: Prisma.CollaboratorCreateManyUserInput | Prisma.CollaboratorCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type CollaboratorUpsertWithWhereUniqueWithoutUserInput = {
@@ -484,6 +485,7 @@ export type CollaboratorCreateOrConnectWithoutVideoInput = {
 
 export type CollaboratorCreateManyVideoInputEnvelope = {
   data: Prisma.CollaboratorCreateManyVideoInput | Prisma.CollaboratorCreateManyVideoInput[]
+  skipDuplicates?: boolean
 }
 
 export type CollaboratorUpsertWithWhereUniqueWithoutVideoInput = {
@@ -1288,6 +1290,7 @@ export type CollaboratorCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * The data used to create many Collaborators.
    */
   data: Prisma.CollaboratorCreateManyInput | Prisma.CollaboratorCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1306,6 +1309,7 @@ export type CollaboratorCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * The data used to create many Collaborators.
    */
   data: Prisma.CollaboratorCreateManyInput | Prisma.CollaboratorCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

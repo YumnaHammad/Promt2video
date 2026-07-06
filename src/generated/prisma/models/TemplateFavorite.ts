@@ -406,6 +406,7 @@ export type TemplateFavoriteCreateOrConnectWithoutUserInput = {
 
 export type TemplateFavoriteCreateManyUserInputEnvelope = {
   data: Prisma.TemplateFavoriteCreateManyUserInput | Prisma.TemplateFavoriteCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type TemplateFavoriteUpsertWithWhereUniqueWithoutUserInput = {
@@ -453,6 +454,7 @@ export type TemplateFavoriteCreateOrConnectWithoutTemplateInput = {
 
 export type TemplateFavoriteCreateManyTemplateInputEnvelope = {
   data: Prisma.TemplateFavoriteCreateManyTemplateInput | Prisma.TemplateFavoriteCreateManyTemplateInput[]
+  skipDuplicates?: boolean
 }
 
 export type TemplateFavoriteUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -1243,6 +1245,7 @@ export type TemplateFavoriteCreateManyArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many TemplateFavorites.
    */
   data: Prisma.TemplateFavoriteCreateManyInput | Prisma.TemplateFavoriteCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1261,6 +1264,7 @@ export type TemplateFavoriteCreateManyAndReturnArgs<ExtArgs extends runtime.Type
    * The data used to create many TemplateFavorites.
    */
   data: Prisma.TemplateFavoriteCreateManyInput | Prisma.TemplateFavoriteCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

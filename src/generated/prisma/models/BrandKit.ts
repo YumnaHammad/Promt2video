@@ -708,6 +708,7 @@ export type BrandKitCreateOrConnectWithoutUserInput = {
 
 export type BrandKitCreateManyUserInputEnvelope = {
   data: Prisma.BrandKitCreateManyUserInput | Prisma.BrandKitCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type BrandKitUpsertWithWhereUniqueWithoutUserInput = {
@@ -787,6 +788,7 @@ export type BrandKitCreateOrConnectWithoutOrganizationInput = {
 
 export type BrandKitCreateManyOrganizationInputEnvelope = {
   data: Prisma.BrandKitCreateManyOrganizationInput | Prisma.BrandKitCreateManyOrganizationInput[]
+  skipDuplicates?: boolean
 }
 
 export type BrandKitUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -1840,6 +1842,7 @@ export type BrandKitCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * The data used to create many BrandKits.
    */
   data: Prisma.BrandKitCreateManyInput | Prisma.BrandKitCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1858,6 +1861,7 @@ export type BrandKitCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many BrandKits.
    */
   data: Prisma.BrandKitCreateManyInput | Prisma.BrandKitCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

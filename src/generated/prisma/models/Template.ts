@@ -1979,6 +1979,7 @@ export type TemplateCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * The data used to create many Templates.
    */
   data: Prisma.TemplateCreateManyInput | Prisma.TemplateCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1997,6 +1998,7 @@ export type TemplateCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many Templates.
    */
   data: Prisma.TemplateCreateManyInput | Prisma.TemplateCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

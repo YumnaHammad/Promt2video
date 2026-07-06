@@ -1276,6 +1276,7 @@ export type VoiceCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * The data used to create many Voices.
    */
   data: Prisma.VoiceCreateManyInput | Prisma.VoiceCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1294,6 +1295,7 @@ export type VoiceCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many Voices.
    */
   data: Prisma.VoiceCreateManyInput | Prisma.VoiceCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

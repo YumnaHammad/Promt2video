@@ -1346,6 +1346,7 @@ export type SubscriptionCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * The data used to create many Subscriptions.
    */
   data: Prisma.SubscriptionCreateManyInput | Prisma.SubscriptionCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1364,6 +1365,7 @@ export type SubscriptionCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * The data used to create many Subscriptions.
    */
   data: Prisma.SubscriptionCreateManyInput | Prisma.SubscriptionCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

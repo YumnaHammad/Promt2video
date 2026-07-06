@@ -1067,6 +1067,7 @@ export type VideoCreateOrConnectWithoutUserInput = {
 
 export type VideoCreateManyUserInputEnvelope = {
   data: Prisma.VideoCreateManyUserInput | Prisma.VideoCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type VideoUpsertWithWhereUniqueWithoutUserInput = {
@@ -1176,6 +1177,7 @@ export type VideoCreateOrConnectWithoutProjectInput = {
 
 export type VideoCreateManyProjectInputEnvelope = {
   data: Prisma.VideoCreateManyProjectInput | Prisma.VideoCreateManyProjectInput[]
+  skipDuplicates?: boolean
 }
 
 export type VideoUpsertWithWhereUniqueWithoutProjectInput = {
@@ -1385,6 +1387,7 @@ export type VideoCreateOrConnectWithoutTemplateInput = {
 
 export type VideoCreateManyTemplateInputEnvelope = {
   data: Prisma.VideoCreateManyTemplateInput | Prisma.VideoCreateManyTemplateInput[]
+  skipDuplicates?: boolean
 }
 
 export type VideoUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -1594,6 +1597,7 @@ export type VideoCreateOrConnectWithoutBrandKitInput = {
 
 export type VideoCreateManyBrandKitInputEnvelope = {
   data: Prisma.VideoCreateManyBrandKitInput | Prisma.VideoCreateManyBrandKitInput[]
+  skipDuplicates?: boolean
 }
 
 export type VideoUpsertWithWhereUniqueWithoutBrandKitInput = {
@@ -3206,6 +3210,7 @@ export type VideoCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * The data used to create many Videos.
    */
   data: Prisma.VideoCreateManyInput | Prisma.VideoCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -3224,6 +3229,7 @@ export type VideoCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many Videos.
    */
   data: Prisma.VideoCreateManyInput | Prisma.VideoCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

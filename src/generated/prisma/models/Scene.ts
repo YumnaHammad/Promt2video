@@ -697,6 +697,7 @@ export type SceneCreateOrConnectWithoutVideoInput = {
 
 export type SceneCreateManyVideoInputEnvelope = {
   data: Prisma.SceneCreateManyVideoInput | Prisma.SceneCreateManyVideoInput[]
+  skipDuplicates?: boolean
 }
 
 export type SceneUpsertWithWhereUniqueWithoutVideoInput = {
@@ -1794,6 +1795,7 @@ export type SceneCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * The data used to create many Scenes.
    */
   data: Prisma.SceneCreateManyInput | Prisma.SceneCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1812,6 +1814,7 @@ export type SceneCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many Scenes.
    */
   data: Prisma.SceneCreateManyInput | Prisma.SceneCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

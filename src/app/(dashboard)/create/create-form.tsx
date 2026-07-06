@@ -112,8 +112,16 @@ export default function CreateForm() {
       }
 
       toast.success("Video generation started!", {
-        description: "Redirecting to progress view...",
+        description:
+          data.video?.status === "EDITING"
+            ? "Opening editor..."
+            : "Redirecting to progress view...",
       });
+
+      if (data.video?.status === "EDITING") {
+        router.push(`/editor/${data.videoId ?? data.video?.id}`);
+        return;
+      }
 
       router.push(`/videos/${data.videoId ?? data.video?.id}`);
     } catch (error) {

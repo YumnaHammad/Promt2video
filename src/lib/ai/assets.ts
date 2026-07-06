@@ -17,6 +17,10 @@ export async function fetchAssetsForScene(
   type: "image" | "video" = "image",
   count = 3
 ): Promise<FetchedAsset[]> {
+  if (isDemoMode()) {
+    return getPlaceholderAssets(visualPrompt, count);
+  }
+
   const results: FetchedAsset[] = [];
 
   const pexelsResults = await fetchFromPexels(visualPrompt, type, count);

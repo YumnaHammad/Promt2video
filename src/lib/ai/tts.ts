@@ -2,6 +2,7 @@ import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
 import type { Readable } from "stream";
 import { uploadFile } from "../storage";
 import { nanoid } from "nanoid";
+import { isDemoMode } from "../demo-mode";
 import { DEFAULT_FREE_VOICE, FREE_VOICES, type FreeVoice } from "../voices";
 
 export type { FreeVoice };
@@ -41,6 +42,21 @@ export async function generateTTS(
   const trimmed = text.trim();
   if (!trimmed) {
     throw new Error("Narration text is required for voice generation");
+  }
+
+  if (isDemoMode()) {
+    const duration = estimateDuration(trimmed);
+    const base = process.env.NEXT_PUBLIC_APP_URL ?? "";
+    const audioUrl = base
+      ? `${base.replace(/\/$/, "")}/api/demo/silent-audio`
+      : "/api/demo/silent-audio";
+
+    return {
+      audioUrl,
+      duration,
+      subtitles: generateSubtitlesFromText(trimmed, duration),
+      voiceId: voice,
+    };
   }
 
   const { buffer, voiceId } = await synthesizeSpeech(trimmed, voice);

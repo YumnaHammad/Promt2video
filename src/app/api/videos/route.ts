@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createVideoRecord } from "@/lib/video-records";
+import { isDemoMode } from "@/lib/demo-mode";
 import { checkRateLimit } from "@/lib/rate-limit";
 import {
   errorResponse,
@@ -102,10 +103,21 @@ export async function POST(request: Request) {
       videoId: video.id,
     };
 
-    after(() => {
-      runVideoPipeline(pipelineOptions).catch((error) => {
+    if (isDemoMode()) {
+      await runVideoPipeline(pipelineOptions).catch((error) => {
         console.error(`Video pipeline failed for ${video.id}:`, error);
       });
+
+      const updated = await db.video.findUnique({ where: { id: video.id } });
+      return jsonResponse({ video: updated, videoId: video.id }, 200);
+    }
+
+    after(async () => {
+      try {
+        await runVideoPipeline(pipelineOptions);
+      } catch (error) {
+        console.error(`Video pipeline failed for ${video.id}:`, error);
+      }
     });
 
     return jsonResponse({ video, videoId: video.id }, 202);

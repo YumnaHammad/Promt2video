@@ -57,6 +57,10 @@ ${options?.duration ? `Target duration: ${options.duration} seconds` : ""}
 ${options?.style ? `Style: ${options.style}` : ""}
 Return only valid JSON.`;
 
+  if (isDemoMode() && !options?.useOwnKeys) {
+    return generateMockScript(prompt, options?.duration, options?.style);
+  }
+
   if (options?.useOwnKeys) {
     const openaiKey = await getUserApiKey(userId, "OPENAI");
     if (openaiKey) {

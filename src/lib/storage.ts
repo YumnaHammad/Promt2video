@@ -34,10 +34,19 @@ async function uploadLocal(
   file: Buffer,
   key: string
 ): Promise<string> {
-  const dir = path.join(process.cwd(), "public", "demo-assets");
+  const isVercel = Boolean(process.env.VERCEL);
+  const dir = isVercel
+    ? path.join("/tmp", "demo-assets")
+    : path.join(process.cwd(), "public", "demo-assets");
   await fs.mkdir(dir, { recursive: true });
   const filename = key.replace(/\//g, "_");
   await fs.writeFile(path.join(dir, filename), file);
+
+  if (isVercel) {
+    const base = process.env.NEXT_PUBLIC_APP_URL ?? "";
+    return `${base.replace(/\/$/, "")}/api/demo/assets/${encodeURIComponent(filename)}`;
+  }
+
   const base = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
   return `${base}/demo-assets/${filename}`;
 }

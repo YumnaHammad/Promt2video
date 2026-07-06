@@ -49,8 +49,8 @@ const GENERATION_STEPS = [
 
 function estimateRemainingSeconds(progress: number): number {
   if (progress >= 100) return 0;
-  const totalEstimate = 150;
-  return Math.max(5, Math.round(totalEstimate * (1 - progress / 100)));
+  const totalEstimate = progress <= 10 ? 20 : 90;
+  return Math.max(3, Math.round(totalEstimate * (1 - progress / 100)));
 }
 
 export function VideoProgressClient({ videoId }: VideoProgressClientProps) {
@@ -68,6 +68,17 @@ export function VideoProgressClient({ videoId }: VideoProgressClientProps) {
 
   useEffect(() => {
     let active = true;
+    let kickoffSent = false;
+
+    async function ensureGeneration() {
+      if (kickoffSent) return;
+      kickoffSent = true;
+      try {
+        await fetch(`/api/videos/${videoId}/generate`, { method: "POST" });
+      } catch {
+        kickoffSent = false;
+      }
+    }
 
     async function poll() {
       try {
@@ -81,6 +92,14 @@ export function VideoProgressClient({ videoId }: VideoProgressClientProps) {
         if (!active) return;
 
         setVideo(data);
+
+        if (
+          data.status === "GENERATING" &&
+          (data.generationProgress ?? 0) <= 10 &&
+          (data._count?.scenes ?? data.scenes?.length ?? 0) === 0
+        ) {
+          void ensureGeneration();
+        }
 
         if (data.status === "EDITING" || data.status === "COMPLETED") {
           router.replace(`/editor/${videoId}`);

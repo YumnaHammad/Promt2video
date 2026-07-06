@@ -3,10 +3,8 @@ import type { Readable } from "stream";
 import { uploadFile } from "../storage";
 import { nanoid } from "nanoid";
 import { isDemoMode } from "../demo-mode";
+import { DEMO_SILENT_AUDIO_PATH } from "../demo-audio";
 import { DEFAULT_FREE_VOICE, FREE_VOICES, type FreeVoice } from "../voices";
-
-export type { FreeVoice };
-export { FREE_VOICES, DEFAULT_FREE_VOICE };
 
 export interface SubtitleWord {
   text: string;
@@ -32,7 +30,8 @@ const SILENT_MP3 = Buffer.from(
 
 export async function generateTTS(
   text: string,
-  voice = DEFAULT_FREE_VOICE
+  voice = DEFAULT_FREE_VOICE,
+  options?: { fast?: boolean }
 ): Promise<{
   audioUrl: string;
   duration: number;
@@ -44,7 +43,7 @@ export async function generateTTS(
     throw new Error("Narration text is required for voice generation");
   }
 
-  if (isDemoMode()) {
+  if (options?.fast && isDemoMode()) {
     const duration = estimateDuration(trimmed);
     const base = process.env.NEXT_PUBLIC_APP_URL ?? "";
     const audioUrl = base
@@ -215,3 +214,6 @@ export async function generateElevenLabsTTS(
 
   return { audioUrl, duration, subtitles, voiceId };
 }
+
+export type { FreeVoice };
+export { FREE_VOICES, DEFAULT_FREE_VOICE };

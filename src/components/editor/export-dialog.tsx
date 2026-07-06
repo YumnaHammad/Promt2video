@@ -24,6 +24,9 @@ import {
   type PlatformPreset,
 } from "@/lib/platform-presets";
 import { useEditorStore } from "@/stores/editor-store";
+import { exportVideoInBrowser } from "@/lib/browser-export";
+
+const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
 interface ExportDialogProps {
   open: boolean;
@@ -44,6 +47,9 @@ export function ExportDialog({
 }: ExportDialogProps) {
   const platformId = useEditorStore((s) => s.platformId);
   const outputUrl = useEditorStore((s) => s.outputUrl);
+  const scenes = useEditorStore((s) => s.scenes);
+  const width = useEditorStore((s) => s.width);
+  const height = useEditorStore((s) => s.height);
   const setExportSettings = useEditorStore((s) => s.setExportSettings);
 
   const [selectedPlatform, setSelectedPlatform] = useState(platformId);
@@ -162,6 +168,24 @@ export function ExportDialog({
         aspectRatio: preset.aspectRatio,
       });
 
+      if (DEMO_MODE) {
+        const blob = await exportVideoInBrowser({
+          scenes,
+          width: preset.width,
+          height: preset.height,
+          onProgress: setProgress,
+        });
+
+        const objectUrl = URL.createObjectURL(blob);
+        setPhase("complete");
+        setDownloadUrl(objectUrl);
+        setExportSettings({ outputUrl: objectUrl });
+        toast.success("Export complete!", {
+          description: "Your video was rendered in the browser.",
+        });
+        return;
+      }
+
       const id = await onExport(selectedPlatform);
       if (!id) throw new Error("Failed to start export");
 
@@ -249,7 +273,9 @@ export function ExportDialog({
             <div>
               <p className="font-medium">Rendering your video...</p>
               <p className="text-sm text-muted-foreground">
-                Exporting for {selected?.label ?? "platform"} — this may take 1–3 minutes.
+                {DEMO_MODE
+                  ? "Rendering in your browser — keep this tab open."
+                  : `Exporting for ${selected?.label ?? "platform"} — this may take 1–3 minutes.`}
               </p>
             </div>
             <div className="mx-auto max-w-sm space-y-2">

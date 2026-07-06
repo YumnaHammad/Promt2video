@@ -2,6 +2,7 @@ import { db } from "./db";
 import { generateScript } from "./ai/script";
 import { fetchAssetsForScene, saveAssetToDb } from "./ai/assets";
 import { generateTTS } from "./ai/tts";
+import { isDemoMode } from "./demo-mode";
 import { buildRemotionData, mapBrandKit } from "./remotion/builder";
 import { createVideoRecord } from "./video-records";
 
@@ -147,7 +148,9 @@ export async function runVideoPipeline(options: PipelineOptions) {
         `Scene ${i + 1} of ${sceneCount}: generating voiceover...`
       );
 
-      const tts = await generateTTS(scriptScene.narration);
+      const tts = await generateTTS(scriptScene.narration, undefined, {
+        fast: isDemoMode(),
+      });
 
       const sceneRecord = await db.scene.create({
         data: {

@@ -7,6 +7,7 @@ import { useEditorStore } from "@/stores/editor-store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { DEFAULT_FREE_VOICE, FREE_VOICES } from "@/lib/voices";
+import { isDemoPlaceholderAudio } from "@/lib/demo-audio";
 
 interface VoiceEditorProps {
   videoId: string;
@@ -105,6 +106,7 @@ export function VoiceEditor({ videoId }: VoiceEditorProps) {
   }
 
   const hasVoice = Boolean(scene.audioUrl);
+  const isPlaceholder = isDemoPlaceholderAudio(scene.audioUrl);
 
   return (
     <div className="space-y-4 rounded-xl border border-border/50 bg-card/30 p-4 backdrop-blur-xl">
@@ -116,12 +118,14 @@ export function VoiceEditor({ videoId }: VoiceEditorProps) {
         <span
           className={cn(
             "rounded-full px-2 py-0.5 text-[10px] font-medium",
-            hasVoice
-              ? "bg-emerald-500/15 text-emerald-400"
-              : "bg-amber-500/15 text-amber-400"
+            isPlaceholder
+              ? "bg-amber-500/15 text-amber-400"
+              : hasVoice
+                ? "bg-emerald-500/15 text-emerald-400"
+                : "bg-amber-500/15 text-amber-400"
           )}
         >
-          {hasVoice ? "Ready" : "Missing"}
+          {isPlaceholder ? "Placeholder" : hasVoice ? "Ready" : "Missing"}
         </span>
       </div>
 
@@ -144,7 +148,14 @@ export function VoiceEditor({ videoId }: VoiceEditorProps) {
         </select>
       </div>
 
-      {hasVoice && scene.audioUrl && (
+      {isPlaceholder && (
+        <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-200">
+          Demo used a silent placeholder for speed. Click Regenerate Voice for real
+          AI speech.
+        </p>
+      )}
+
+      {hasVoice && scene.audioUrl && !isPlaceholder && (
         <div className="rounded-lg border border-border/50 bg-background/30 p-3">
           <p className="mb-2 text-xs text-muted-foreground">Preview</p>
           {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
@@ -172,7 +183,7 @@ export function VoiceEditor({ videoId }: VoiceEditorProps) {
         ) : hasVoice ? (
           <>
             <RefreshCw className="h-4 w-4" />
-            Regenerate Voice
+            {isPlaceholder ? "Generate Real Voice" : "Regenerate Voice"}
           </>
         ) : (
           <>

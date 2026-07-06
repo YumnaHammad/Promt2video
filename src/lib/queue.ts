@@ -20,15 +20,22 @@ export interface RenderProgress {
   error?: string;
 }
 
-export const renderQueue = new Queue<RenderJobData>(RENDER_QUEUE_NAME, {
-  connection: redisConnectionOptions,
-  defaultJobOptions: {
-    attempts: 3,
-    backoff: { type: "exponential", delay: 5000 },
-    removeOnComplete: { count: 100 },
-    removeOnFail: { count: 50 },
-  },
-});
+let renderQueue: Queue<RenderJobData> | undefined;
+
+function getRenderQueue(): Queue<RenderJobData> {
+  if (!renderQueue) {
+    renderQueue = new Queue<RenderJobData>(RENDER_QUEUE_NAME, {
+      connection: redisConnectionOptions,
+      defaultJobOptions: {
+        attempts: 3,
+        backoff: { type: "exponential", delay: 5000 },
+        removeOnComplete: { count: 100 },
+        removeOnFail: { count: 50 },
+      },
+    });
+  }
+  return renderQueue;
+}
 
 export async function isRedisAvailable(): Promise<boolean> {
   try {
@@ -48,7 +55,7 @@ export async function enqueueRenderJob(
   }
 
   try {
-    await renderQueue.add(`render-${data.type}`, data, {
+    await getRenderQueue().add(`render-${data.type}`, data, {
       priority,
       jobId: data.renderJobId,
     });
@@ -59,7 +66,7 @@ export async function enqueueRenderJob(
 }
 
 export async function cancelRenderJob(jobId: string): Promise<boolean> {
-  const job = await renderQueue.getJob(jobId);
+  const job = await getRenderQueue().getJob(jobId);
   if (!job) return false;
   const state = await job.getState();
   if (state === "active") {

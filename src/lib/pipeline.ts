@@ -3,8 +3,9 @@ import { generateScript } from "./ai/script";
 import { fetchAssetsForScene, saveAssetToDb } from "./ai/assets";
 import { generateTTS } from "./ai/tts";
 import { buildRemotionData, mapBrandKit } from "./remotion/builder";
-import { enqueueRenderJob } from "./queue";
-import { runRenderJobInBackground } from "./render-job";
+import { createVideoRecord } from "./video-records";
+
+export { createVideoRecord };
 import { getPlatformPreset, resolveVideoDimensions } from "./platform-presets";
 import { DEFAULT_FREE_VOICE } from "./voices";
 import {
@@ -51,25 +52,6 @@ async function updateGenerationProgress(
           step,
         },
       },
-    },
-  });
-}
-
-export async function createVideoRecord(options: PipelineOptions) {
-  const { prompt, userId, projectId, templateId, brandKitId } = options;
-
-  return db.video.create({
-    data: {
-      title: "Generating...",
-      prompt,
-      status: "GENERATING",
-      scriptData: {
-        _generation: { progress: 5, step: "Starting generation..." },
-      },
-      userId,
-      projectId,
-      templateId,
-      brandKitId,
     },
   });
 }
@@ -370,6 +352,7 @@ export async function startRender(
     },
   });
 
+  const { enqueueRenderJob } = await import("./queue");
   const mode = await enqueueRenderJob({
     renderJobId: renderJob.id,
     videoId,
@@ -378,6 +361,7 @@ export async function startRender(
   });
 
   if (mode === "inline") {
+    const { runRenderJobInBackground } = await import("./render-job");
     runRenderJobInBackground({
       renderJobId: renderJob.id,
       videoId,

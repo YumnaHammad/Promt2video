@@ -96,10 +96,19 @@ export default function CreateForm() {
         }),
       });
 
-      const data = await res.json();
+      const contentType = res.headers.get("content-type") ?? "";
+      const data = contentType.includes("application/json")
+        ? await res.json().catch(() => ({}))
+        : {};
 
       if (!res.ok) {
-        throw new Error(data.error ?? "Failed to start pipeline");
+        const message =
+          typeof data.error === "string"
+            ? data.error
+            : res.status >= 500
+              ? "Server error — try again in a moment"
+              : "Failed to start pipeline";
+        throw new Error(message);
       }
 
       toast.success("Video generation started!", {

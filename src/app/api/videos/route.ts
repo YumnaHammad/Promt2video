@@ -1,7 +1,8 @@
+import { after } from "next/server";
 import { z } from "zod";
 import { requireAuth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { runVideoPipeline, createVideoRecord } from "@/lib/pipeline";
+import { createVideoRecord } from "@/lib/video-records";
 import { checkRateLimit } from "@/lib/rate-limit";
 import {
   errorResponse,
@@ -18,6 +19,8 @@ const createVideoSchema = z.object({
   duration: z.number().min(15).max(600).optional(),
   style: z.string().max(100).optional(),
 });
+
+export const maxDuration = 60;
 
 export async function GET(request: Request) {
   try {
@@ -92,12 +95,17 @@ export async function POST(request: Request) {
       userId: user.id,
     });
 
-    void runVideoPipeline({
+    const { runVideoPipeline } = await import("@/lib/pipeline");
+    const pipelineOptions = {
       ...parsed.data,
       userId: user.id,
       videoId: video.id,
-    }).catch((error) => {
-      console.error(`Video pipeline failed for ${video.id}:`, error);
+    };
+
+    after(() => {
+      runVideoPipeline(pipelineOptions).catch((error) => {
+        console.error(`Video pipeline failed for ${video.id}:`, error);
+      });
     });
 
     return jsonResponse({ video, videoId: video.id }, 202);

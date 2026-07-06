@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { requireAuth } from "@/lib/auth";
-import { startRender } from "@/lib/pipeline";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { errorResponse, handleApiError, jsonResponse } from "@/lib/api-utils";
 
@@ -24,6 +23,7 @@ export async function POST(request: Request, context: RouteContext) {
       return errorResponse(parsed.error.issues[0]?.message ?? "Invalid input", 400);
     }
 
+    const { startRender } = await import("@/lib/pipeline");
     const renderJob = await startRender(id, user.id, parsed.data.type, {
       platformId: parsed.data.platformId,
     });

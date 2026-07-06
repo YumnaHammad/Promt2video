@@ -32,7 +32,7 @@ export function hasPremiumTemplateAccess(plan: string | null | undefined): boole
 }
 
 export function canUseTemplate(
-  template: { isPremium: boolean },
+  template: { id: string; isPremium: boolean },
   ownedTemplateIds: Set<string>,
   plan: string | null | undefined
 ): boolean {

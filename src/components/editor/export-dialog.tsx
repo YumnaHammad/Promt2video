@@ -54,8 +54,8 @@ export function ExportDialog({
   const [error, setError] = useState<string | null>(null);
   const [cancelling, setCancelling] = useState(false);
 
-  useEffect(() => {
-    if (open) {
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (nextOpen) {
       setSelectedPlatform(platformId);
       setPhase(outputUrl ? "complete" : "select");
       setDownloadUrl(outputUrl);
@@ -63,7 +63,8 @@ export function ExportDialog({
       setJobId(null);
       setError(null);
     }
-  }, [open, platformId, outputUrl]);
+    onOpenChange(nextOpen);
+  };
 
   const pollJob = useCallback(
     async (id: string) => {
@@ -198,7 +199,7 @@ export function ExportDialog({
   const selected = PLATFORM_PRESETS.find((p) => p.id === selectedPlatform);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -231,7 +232,7 @@ export function ExportDialog({
             )}
 
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => onOpenChange(false)}>
+              <Button variant="outline" onClick={() => handleOpenChange(false)}>
                 Cancel
               </Button>
               <Button variant="gradient" onClick={handleExport}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Loader2, Mic, MicOff, RefreshCw, Volume2 } from "lucide-react";
 import { toast } from "sonner";
 import { useEditorStore } from "@/stores/editor-store";
@@ -23,15 +23,10 @@ export function VoiceEditor({ videoId }: VoiceEditorProps) {
   const [regeneratingAll, setRegeneratingAll] = useState(false);
 
   const scene = scenes.find((s) => s.id === selectedSceneId);
+  const activeVoiceId = scene?.voiceId ?? voiceId;
   const scenesWithoutVoice = scenes.filter(
     (s) => s.narration?.trim() && !s.audioUrl
   ).length;
-
-  useEffect(() => {
-    if (scene?.voiceId) {
-      setVoiceId(scene.voiceId);
-    }
-  }, [scene?.id, scene?.voiceId]);
 
   const handleGenerateVoice = async () => {
     if (!scene) return;
@@ -48,7 +43,7 @@ export function VoiceEditor({ videoId }: VoiceEditorProps) {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ voiceId, narration }),
+          body: JSON.stringify({ voiceId: activeVoiceId, narration }),
         }
       );
 
@@ -65,7 +60,7 @@ export function VoiceEditor({ videoId }: VoiceEditorProps) {
       });
 
       toast.success("Voice generated", {
-        description: `Using ${FREE_VOICES.find((v) => v.id === voiceId)?.label ?? "free voice"}`,
+        description: `Using ${FREE_VOICES.find((v) => v.id === activeVoiceId)?.label ?? "free voice"}`,
       });
     } catch (error) {
       toast.error(
@@ -137,7 +132,7 @@ export function VoiceEditor({ videoId }: VoiceEditorProps) {
       <div className="space-y-2">
         <label className="text-xs text-muted-foreground">Voice</label>
         <select
-          value={voiceId}
+          value={activeVoiceId}
           onChange={(e) => setVoiceId(e.target.value)}
           className="flex h-9 w-full rounded-lg border border-border bg-background/50 px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >

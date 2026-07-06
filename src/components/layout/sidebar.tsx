@@ -37,6 +37,73 @@ const bottomNavItems = [
   { href: "/billing", label: "Billing", icon: CreditCard },
 ];
 
+function readDemoAdminCookie(): boolean {
+  if (typeof document === "undefined") return false;
+  const demoUserId = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("demo-user="))
+    ?.split("=")[1];
+  return demoUserId === "demo_admin_user";
+}
+
+function SidebarNavLink({
+  href,
+  label,
+  icon: Icon,
+  pathname,
+  collapsed,
+  showLabels,
+  onMobileClose,
+}: {
+  href: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  pathname: string;
+  collapsed: boolean;
+  showLabels: boolean;
+  onMobileClose?: () => void;
+}) {
+  const isActive =
+    pathname === href ||
+    (href !== "/dashboard" && pathname.startsWith(href));
+
+  return (
+    <Link
+      href={href}
+      title={collapsed ? label : undefined}
+      onClick={onMobileClose}
+      className={cn(
+        "group relative flex items-center gap-3 rounded-lg text-sm font-medium transition-all duration-200",
+        collapsed ? "justify-center px-2 py-2.5" : "px-3 py-2.5",
+        isActive
+          ? "bg-primary/15 text-primary"
+          : "text-muted-foreground hover:bg-accent hover:text-foreground"
+      )}
+    >
+      {isActive && (
+        <motion.div
+          layoutId="sidebar-active"
+          className="absolute inset-0 rounded-lg bg-primary/10"
+          transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+        />
+      )}
+      <Icon className="relative z-10 h-5 w-5 shrink-0" />
+      <AnimatePresence mode="wait">
+        {showLabels && (
+          <motion.span
+            initial={{ opacity: 0, width: 0 }}
+            animate={{ opacity: 1, width: "auto" }}
+            exit={{ opacity: 0, width: 0 }}
+            className="relative z-10 truncate"
+          >
+            {label}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </Link>
+  );
+}
+
 interface SidebarProps {
   mobileOpen?: boolean;
   onMobileClose?: () => void;
@@ -46,21 +113,13 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const pathname = usePathname();
   const { sidebarCollapsed, toggleSidebar } = useUIStore();
   const [isMobile, setIsMobile] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin] = useState(readDemoAdminCookie);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  useEffect(() => {
-    const demoUserId = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("demo-user="))
-      ?.split("=")[1];
-    setIsAdmin(demoUserId === "demo_admin_user");
   }, []);
 
   useEffect(() => {
@@ -81,56 +140,6 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
 
   const collapsed = !isMobile && sidebarCollapsed;
   const showLabels = !collapsed || isMobile;
-
-  const NavLink = ({
-    href,
-    label,
-    icon: Icon,
-  }: {
-    href: string;
-    label: string;
-    icon: React.ComponentType<{ className?: string }>;
-  }) => {
-    const isActive =
-      pathname === href ||
-      (href !== "/dashboard" && pathname.startsWith(href));
-
-    return (
-      <Link
-        href={href}
-        title={collapsed ? label : undefined}
-        onClick={onMobileClose}
-        className={cn(
-          "group relative flex items-center gap-3 rounded-lg text-sm font-medium transition-all duration-200",
-          collapsed ? "justify-center px-2 py-2.5" : "px-3 py-2.5",
-          isActive
-            ? "bg-primary/15 text-primary"
-            : "text-muted-foreground hover:bg-accent hover:text-foreground"
-        )}
-      >
-        {isActive && (
-          <motion.div
-            layoutId="sidebar-active"
-            className="absolute inset-0 rounded-lg bg-primary/10"
-            transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-          />
-        )}
-        <Icon className="relative z-10 h-5 w-5 shrink-0" />
-        <AnimatePresence mode="wait">
-          {showLabels && (
-            <motion.span
-              initial={{ opacity: 0, width: 0 }}
-              animate={{ opacity: 1, width: "auto" }}
-              exit={{ opacity: 0, width: 0 }}
-              className="relative z-10 truncate"
-            >
-              {label}
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </Link>
-    );
-  };
 
   const sidebarContent = (
     <div className="flex h-full flex-col">
@@ -180,7 +189,14 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
             </p>
           )}
           {navItems.map((item) => (
-            <NavLink key={item.href} {...item} />
+            <SidebarNavLink
+              key={item.href}
+              {...item}
+              pathname={pathname}
+              collapsed={collapsed}
+              showLabels={showLabels}
+              onMobileClose={onMobileClose}
+            />
           ))}
         </div>
 
@@ -191,15 +207,38 @@ export function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
             </p>
           )}
           {bottomNavItems.map((item) => (
-            <NavLink key={item.href} {...item} />
+            <SidebarNavLink
+              key={item.href}
+              {...item}
+              pathname={pathname}
+              collapsed={collapsed}
+              showLabels={showLabels}
+              onMobileClose={onMobileClose}
+            />
           ))}
         </div>
       </nav>
 
       <div className="shrink-0 space-y-1 border-t border-border/50 p-3">
-        <NavLink href="/" label="Back to site" icon={Home} />
+        <SidebarNavLink
+          href="/"
+          label="Back to site"
+          icon={Home}
+          pathname={pathname}
+          collapsed={collapsed}
+          showLabels={showLabels}
+          onMobileClose={onMobileClose}
+        />
         {isAdmin && (
-          <NavLink href="/admin" label="Admin panel" icon={Shield} />
+          <SidebarNavLink
+            href="/admin"
+            label="Admin panel"
+            icon={Shield}
+            pathname={pathname}
+            collapsed={collapsed}
+            showLabels={showLabels}
+            onMobileClose={onMobileClose}
+          />
         )}
 
         {!isMobile && (

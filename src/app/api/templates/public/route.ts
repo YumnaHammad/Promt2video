@@ -1,4 +1,3 @@
-import { db } from "@/lib/db";
 import { handleApiError, jsonResponse } from "@/lib/api-utils";
 import { getPublishedTemplates, mapTemplateRecord } from "@/lib/templates";
 

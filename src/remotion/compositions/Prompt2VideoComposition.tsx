@@ -13,12 +13,12 @@ import {
 import { TransitionSeries, linearTiming } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
 import { slide } from "@remotion/transitions/slide";
-import type { VideoCompositionData, SceneData } from "@/types/video";
+import type { SceneData, VideoCompositionData } from "@/types/video";
 import { CaptionOverlay } from "../components/CaptionOverlay";
 import { BrandOverlay } from "../components/BrandOverlay";
 import { SceneBackground } from "../components/SceneBackground";
 
-interface Props extends VideoCompositionData {}
+type Props = VideoCompositionData;
 
 const getTransition = (type: string) => {
   switch (type) {
